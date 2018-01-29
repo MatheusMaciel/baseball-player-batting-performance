@@ -1,0 +1,27 @@
+﻿
+Link para a visualização:
+http://bl.ocks.org/MatheusMaciel/aa0ae45197764fe93bacf274e3eb4cf5
+
+##Perguntas:
+OBS: Não sei o que é exatamente essa métrica "Average batting ratio". Estou assumindo que é literalmente a taxa de vezes que um jogador consegue rebater a bola com o taco.
+
+1.O que você percebeu na visualização?
+1.a - é bem estranho que o melhor jogador (o que fez mais home runs - HRs), seja ambidestro.
+1.b - em compensação, é totalmente esperado que o pior jogador seja destro. Por alguma razão, ele também acertou a bola com o taco (ou seja, realizou Hits) bem menos vezes do que os demais.
+1.c - existem bem menos jogadores canhotos, mas também existem bem menos jogadores BONS canhotos.
+
+2.Que perguntas você tem sobre os dados?
+2.a - existe alguma relação entre idade do jogador, ou outra métrica não exibida, e chance de realizar um Hit ou HR? Ou melhor, existe algo que define melhor se um jogador terá mais ou menos Hits, e por consequência, mais ou menos HRs?
+2.b - todos os jogadores que aparecem no gráfico realizaram o mesmo número de jogadas? não existe uma garantia que se um jogador tem mais HRs, ele participou da mesma quantidade de jogadas que um jogador que tem menos HRs.
+2.c - um HR só existe se antes ocorrer um Hit - por que há jogadores com taxa de Hits tão baixa, mas que realizaram HRs?
+
+3.Que relacionamentos você percebeu?
+3.a - os jogadores que tem taxas de Hit maiores tendem a realizar mais HRs - isso era esperado
+3.b - os melhores jogadores (ou seja, os que fazem mais Hits e HRs) tendem a ser destros ou ambidestros
+3.c - boa parte dos jogadores faz mais ou menos a mesma quantidade de Hits, e por alguma razão, a mesma quantidade de HRs - incluindo jogadores canhotos.
+
+4.O que você acha que é o principal destaque dessa visualização?
+4.a - Existe alguma espécie de "comportamento comum" na taxa dos jogadores realizarem Hits, com a quantidade típica de HRs que ele pode realizar. Isso parece comprovado, porque boa parte da distribuição de canhotos também se encontra nessa área (0,1~0,25 Hit - 0~100 HRs).
+
+5.Existe algo que você não entende no gráfico?
+5.a - Por que existem tantos jogadores ambidestros? Existe alguma vantagem, ou possibilidade de realizar mais home runs se o jogador puder escolher com que mão pode segurar o taco de beisebol?

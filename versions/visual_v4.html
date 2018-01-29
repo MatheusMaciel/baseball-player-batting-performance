@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <link rel='stylesheet' type='text/css' href='visual.css'>
+  <script src='http://d3js.org/d3.v3.min.js'></script>
+  <script src='http://dimplejs.org/dist/dimple.v2.0.0.min.js'></script>
+    <script type='text/javascript'>
+      function draw(data) {
+
+        // doing some data transformation to helps creating the graphs
+        data.forEach(function(d){ 
+          d['weight'] = +d['weight'];
+          d['height'] = +d['height'];
+          d['avg'] = +d['avg'];
+          d['HR'] = +d['HR'];
+          d['Weight/Height ratio'] = d['weight']/d['height'];
+          d['count'] = 1;
+
+          handednessConversion = {'R':'Right handed', 'L':'Left handed', 'B':'Both hands'};
+          d['handedness'] = handednessConversion[d['handedness']];
+        });
+
+        // removing players with 0 batting average
+        var filteredData = data.filter(function(d){return d['avg'] > 0;});
+
+        'use strict';
+        //config bubble graph variable setup setup        
+        var margin = 60,
+          bubbleSvgWidth = 1200 - margin,
+          bubbleSvgHeight = 600 - margin,
+          bubbleGraphWidth = bubbleSvgWidth - (2*margin),
+          bubbleGraphHeight = bubbleSvgHeight - margin,
+          bubbleLegendX = bubbleGraphWidth + (2*margin) + 10,
+          bubbleLegendY = (bubbleGraphHeight/2) - 25,
+          bubbleLegendWidth = margin - 10,
+          bubbleLegendHeight = 100,
+          bubbleAlpha = 0.7;
+
+        var barsMargin = margin,
+          barsSvgWidth = bubbleSvgWidth/3,
+          barsSvgHeight = bubbleSvgHeight/2,
+          barsGraphWidth = barsSvgWidth - barsMargin,
+          barsGraphHeight = barsSvgHeight - barsMargin;
+
+        // Count bar svg setup
+        var countBarSvg = d3.select('body')
+          .append('svg')
+          .attr('width', barsSvgWidth + barsMargin)
+          .attr('height', barsSvgHeight + barsMargin)
+          .append('g')
+          .attr('class','chart');
+
+        //Count bar title configuration
+        countBarSvg.append('text')
+          .attr('x', (barsSvgWidth / 2))
+          .attr('y', barsMargin - 25)
+          .attr('text-anchor', 'middle')
+          .style('font-size', '20px')
+          .text('Number of players by handedness');
+
+        // Batting average bar svg setup
+        var battingBarSvg = d3.select('body')
+          .append('svg')
+          .attr('width', barsSvgWidth + barsMargin)
+          .attr('height', barsSvgHeight + barsMargin)
+          .append('g')
+          .attr('class','chart');
+
+        //Batting bar title configuration
+        battingBarSvg.append('text')
+          .attr('x', (barsSvgWidth / 2))
+          .attr('y', barsMargin - 25)
+          .attr('text-anchor', 'middle')
+          .style('font-size', '20px')
+          .text('Average batting performance by handedness');
+
+        // Home runs bar svg setup
+        var hrBarSvg = d3.select('body')
+          .append('svg')
+          .attr('width', barsSvgWidth + barsMargin)
+          .attr('height', barsSvgHeight + barsMargin)
+          .append('g')
+          .attr('class','chart');
+
+        //Home runs bar title configuration
+        hrBarSvg.append('text')
+          .attr('x', (barsSvgWidth / 2))
+          .attr('y', barsMargin - 25)
+          .attr('text-anchor', 'middle')
+          .style('font-size', '20px')
+          .text('Average number of home runs by handedness');
+        
+        // Bubble svg setup
+        var bubbleSvg = d3.select('body')
+          .append('svg')
+          .attr('width', bubbleSvgWidth + margin)
+          .attr('height', bubbleSvgHeight + margin)
+          .append('g')
+          .attr('class','chart');
+
+        //Bubble title configuration
+        bubbleSvg.append('text')
+          .attr('x', (bubbleSvgWidth / 2))
+          .attr('y', margin - 25)
+          .attr('text-anchor', 'middle')
+          .style('font-size', '25px')
+          .text('Player performance: Home runs vs batting average by body ratio');
+
+        // Count bar chart creation
+        var countBarChart = new dimple.chart(countBarSvg, filteredData);
+        countBarChart.setBounds(margin, barsMargin, barsGraphWidth, barsGraphHeight);
+        var countBarXAxis = countBarChart.addCategoryAxis('x', 'handedness');
+        var countBarYAxis = countBarChart.addMeasureAxis('y', 'count');
+        var countBarSeries = countBarChart.addSeries(['handedness'], dimple.plot.bar);
+
+        // Batting bar chart creation
+        var battingBarChart = new dimple.chart(battingBarSvg, filteredData);
+        battingBarChart.setBounds(margin, barsMargin, barsGraphWidth, barsGraphHeight);
+        var battingBarXAxis = battingBarChart.addCategoryAxis('x', 'handedness');
+        var battingBarYAxis = battingBarChart.addMeasureAxis('y', 'avg');
+        var battingBarSeries = battingBarChart.addSeries(['handedness'], dimple.plot.bar);
+
+        // Home runs bar chart creation
+        var hrBarChart = new dimple.chart(hrBarSvg, filteredData);
+        hrBarChart.setBounds(margin, barsMargin, barsGraphWidth, barsGraphHeight);
+        var hrBarXAxis = hrBarChart.addCategoryAxis('x', 'handedness');
+        var hrBarYAxis = hrBarChart.addMeasureAxis('y', 'HR');
+        var hrBarSeries = hrBarChart.addSeries(['handedness'], dimple.plot.bar);
+
+        
+        //Bubble chart creation
+        var bubbleChart = new dimple.chart(bubbleSvg, filteredData);
+        bubbleChart.setBounds(margin, margin, bubbleGraphWidth, bubbleGraphHeight);
+        var bubbleXAxis = bubbleChart.addMeasureAxis('x', 'avg');        
+        var bubbleYAxis = bubbleChart.addLogAxis('y', 'HR', 2);       
+        var bubbleZAxis = bubbleChart.addMeasureAxis('z', 'Weight/Height ratio');        
+        var bubbleSeries = bubbleChart.addSeries(['avg', 'handedness'], dimple.plot.bubble);
+        var bubbleLegend = bubbleChart.addLegend(bubbleLegendX + 10, bubbleLegendY, bubbleLegendWidth, bubbleLegendHeight, 'Left');        
+
+        //x-axis configuration
+        countBarXAxis.title = '';
+
+        battingBarXAxis.title = '';
+
+        hrBarXAxis.title = '';
+
+        bubbleXAxis.title = 'Batting average';
+        bubbleXAxis.fontSize = 'auto';
+        bubbleXAxis.overrideMin = 0;
+        bubbleXAxis.overrideMax = 0.35;
+        bubbleXAxis.tickFormat = '.3';
+
+        //y-axis configuration
+        countBarYAxis.title = '#Players';
+        countBarYAxis.fontSize = 'auto';
+
+        battingBarYAxis.title = 'Batting average';
+        battingBarYAxis.fontSize = 'auto';
+        battingBarYAxis.overrideMin = 0;
+        battingBarYAxis.overrideMax = 0.28;
+        battingBarYAxis.tickFormat = '.3';
+
+        hrBarYAxis.title = 'Batting average';
+        hrBarYAxis.fontSize = 'auto';
+        hrBarYAxis.overrideMin = 0;
+        hrBarYAxis.overrideMax = 70;
+
+        bubbleYAxis.title = 'log2(#Home runs)';
+        bubbleYAxis.fontSize = 'auto';
+        bubbleYAxis.overrideMin = 0;
+        bubbleYAxis.overrideMax = 580;
+
+        //z-axis configuration
+        bubbleZAxis.overrideMin = 2;
+        bubbleZAxis.overrideMax = 3.2;
+
+        //series configuration
+        countBarSeries.aggregate = dimple.aggregateMethod.sum;
+        battingBarSeries.aggregate = dimple.aggregateMethod.avg;
+        hrBarSeries.aggregate = dimple.aggregateMethod.avg;
+        bubbleSeries.aggregate = dimple.aggregateMethod.avg;
+
+        //legend configuration
+        bubbleLegend.fontSize = 'auto';
+
+        countBarChart.draw();
+        battingBarChart.draw();
+        hrBarChart.draw();
+        bubbleChart.draw();
+
+
+        //setting up handedness legend interation
+        bubbleChart.legends = [];
+
+        bubbleSvg.selectAll('title_text')
+          .data(['Click legend to','show/hide handedness:'])
+          .enter()
+          .append('text')
+          .attr('x', bubbleLegendX - 60)
+          .attr('y', function (d, i) { return (bubbleLegendY - 10) + i * 14; })
+          .style('font-family', 'sans-serif')
+          .style('font-size', '10px')
+          .style('color', 'Black')
+          .text(function (d) { return d; });
+
+        var filterValues = dimple.getUniqueValues(filteredData, 'handedness');
+
+        //transform legend rectangles in buttons
+        bubbleLegend.shapes.selectAll('rect')
+          .on('click', function (e) {
+            var hide = false;
+            var newFilters = [];
+            filterValues.forEach(function (f) {
+              if (f === e.aggField.slice(-1)[0]) {
+                hide = true;
+              } else {
+                newFilters.push(f);
+              }
+            });
+            if (hide) {
+              d3.select(this).style('opacity', 0.2);
+            } else {
+              newFilters.push(e.aggField.slice(-1)[0]);
+              d3.select(this).style('opacity', 0.8);
+            }
+            filterValues = newFilters;
+            bubbleChart.data = dimple.filterData(filteredData, 'handedness', filterValues);
+            bubbleChart.draw(800);
+          });
+
+        //setting up bubble radius legend
+        bubbleSvg.selectAll('title_text')
+          .data(['Weight/Height', 'ratio', '(lbs/inches)'])
+          .enter()
+          .append('text')
+          .attr('x', bubbleLegendX - 40)
+          .attr('y', function (d, i) { return (bubbleGraphHeight - 115) + i * 14; })
+          .style('font-family', 'sans-serif')
+          .style('font-size', '12px')
+          .style('color', 'Black')
+          .text(function (d) { return d; });
+
+        var radius = d3.scale.sqrt() //bubble size scaler
+          .domain([2, 3.1])
+          .range([8, 40]);
+
+        var bubbleRadiusLegend = bubbleSvg.append('g')
+          .attr('class', 'legend')
+          .attr('transform', 'translate(' + (bubbleLegendX) + ',' + (bubbleGraphHeight - 5) + ')')
+          .selectAll('g')
+          .data([2, 2.5, 3])
+          .enter().append('g');
+
+        bubbleRadiusLegend.append('circle')
+          .attr('cy', function(d) { return -radius(d); })
+          .attr('r', radius);
+
+        bubbleRadiusLegend.append('text')
+          .attr('y', function(d) { return -2 * radius(d); })
+          .attr('dy', '1.3em')
+          .text(d3.format('.1'));  
+        };
+
+      </script>
+  </head>
+<body>
+  <script type='text/javascript'>
+  d3.csv('baseball_data.csv', draw);
+  </script>
+</body>
+</html>

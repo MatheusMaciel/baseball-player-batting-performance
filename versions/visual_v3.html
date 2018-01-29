@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="visual.css">
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+    <script type="text/javascript">
+      function draw(data) {
+
+        // doing some data transformation to helps creating the graphs
+        data.forEach(function(d){ 
+          d['weight'] = +d['weight'];
+          d['height'] = +d['height'];
+          d['avg'] = +d['avg'];
+          d['HR'] = +d['HR'];
+          d['Weight/Height ratio'] = d['weight']/d['height'];
+
+          handednessConversion = {"R":"Right handed", "L":"Left handed", "B":"Both hands"};
+          d['handedness'] = handednessConversion[d['handedness']]
+        });
+
+        // removing players with 0 batting average
+        var filteredData = data.filter(function(d){return d['avg'] > 0;})
+
+        //config variables setup
+        "use strict";
+        var margin = 60,
+            svgWidth = 900 - margin,
+            svgHeight = 600 - margin,
+            graphWidth = svgWidth - (2*margin),
+            graphHeight = svgHeight - margin,
+            legendX = graphWidth + (2*margin) + 10,
+            legendY = (graphHeight/2) - 25,
+            legendWidth = margin - 10,
+            legendHeight = 100,
+            alpha = 0.7;
+        
+        // svg setup
+        var svg = d3.select("body")
+          .append("svg")
+            .attr("width", svgWidth + margin)
+            .attr("height", svgHeight + margin)
+          .append('g')
+            .attr('class','chart');
+
+        //title configuration
+        svg.append("text")
+          .attr("x", (svgWidth / 2))
+          .attr("y", margin - 25)
+          .attr("text-anchor", "middle")
+          .style("font-size", "25px")
+          .text("Baseball player batting performance: Home runs vs batting average");
+
+        //chart creation
+        var myChart = new dimple.chart(svg, filteredData);
+        myChart.setBounds(margin, margin, graphWidth, graphHeight)
+        var xAxis = myChart.addMeasureAxis("x", "avg");        
+        var yAxis = myChart.addLogAxis("y", "HR", 2);       
+        var zAxis = myChart.addMeasureAxis("z", "Weight/Height ratio");        
+        var mySeries = myChart.addSeries(["avg", "handedness"], dimple.plot.bubble);
+        var myLegend = myChart.addLegend(legendX + 10, legendY, legendWidth, legendHeight, "Left");        
+
+        //x-axis configuration
+        xAxis.title = "Batting average"
+        xAxis.fontSize = "auto";
+        xAxis.overrideMin = 0
+        xAxis.overrideMax = 0.35
+        xAxis.tickFormat = ".3"
+
+        //y-axis configuration
+        yAxis.title = "log2(#Home runs)"
+        yAxis.fontSize = "auto";
+        yAxis.overrideMin = 0
+        yAxis.overrideMax = 580
+
+        //z-axis configuration
+        zAxis.overrideMin = 2
+        zAxis.overrideMax = 3.2 
+
+        //series configuration
+        mySeries.aggregate = dimple.aggregateMethod.avg
+
+        //legend configuration
+        myLegend.fontSize = "auto";
+
+
+        myChart.draw();
+
+
+        //setting up handedness legend interation
+        myChart.legends = [];
+
+        svg.selectAll("title_text")
+          .data(["Click legend to","show/hide handedness:"])
+          .enter()
+          .append("text")
+            .attr("x", legendX - 60)
+            .attr("y", function (d, i) { return (legendY - 10) + i * 14; })
+            .style("font-family", "sans-serif")
+            .style("font-size", "10px")
+            .style("color", "Black")
+            .text(function (d) { return d; });
+
+        var filterValues = dimple.getUniqueValues(filteredData, "handedness");
+
+        //transform legend rectangles in buttons
+        myLegend.shapes.selectAll("rect")
+          .on("click", function (e) {
+            var hide = false;
+            var newFilters = [];
+            filterValues.forEach(function (f) {
+              if (f === e.aggField.slice(-1)[0]) {
+                hide = true;
+              } else {
+                newFilters.push(f);
+              }
+            });
+            if (hide) {
+              d3.select(this).style("opacity", 0.2);
+            } else {
+              newFilters.push(e.aggField.slice(-1)[0]);
+              d3.select(this).style("opacity", 0.8);
+            }
+            filterValues = newFilters;
+            myChart.data = dimple.filterData(filteredData, "handedness", filterValues);
+            myChart.draw(800);
+          });
+
+        //setting up bubble radius legend
+        svg.selectAll("title_text")
+          .data(["Weight/Height", "ratio", "(lbs/inches)"])
+          .enter()
+          .append("text")
+            .attr("x", legendX - 40)
+            .attr("y", function (d, i) { return (graphHeight - 115) + i * 14; })
+            .style("font-family", "sans-serif")
+            .style("font-size", "12px")
+            .style("color", "Black")
+            .text(function (d) { return d; });
+
+        var radius = d3.scale.sqrt() //bubble size scaler
+          .domain([2, 3.1])
+          .range([8, 40]);
+
+        var legend = svg.append("g")
+          .attr("class", "legend")
+          .attr("transform", "translate(" + (legendX) + "," + (graphHeight - 5) + ")")
+          .selectAll("g")
+          .data([2, 2.5, 3])
+          .enter().append("g");
+
+        legend.append("circle")
+          .attr("cy", function(d) { return -radius(d); })
+          .attr("r", radius);
+
+        legend.append("text")
+          .attr("y", function(d) { return -2 * radius(d); })
+          .attr("dy", "1.3em")
+          .text(d3.format(".1"));  
+        };
+
+      </script>
+  </head>
+<body>
+  <script type="text/javascript">
+  d3.csv("baseball_data.csv", draw);
+  </script>
+</body>
+</html>

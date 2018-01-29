@@ -1,0 +1,31 @@
+﻿
+Link para a visualização:
+http://bl.ocks.org/MatheusMaciel/aa0ae45197764fe93bacf274e3eb4cf5
+
+##Perguntas:
+1.O que você percebeu na visualização?
+Nos dados analisados, existem mais pessoas destras do que as canonhtas e ambidestras.
+Nos dados analisados, dá pra notar claramente que os canhotos tem um batting average proporcionalmente maior que os destros e ambidestros
+Nos dados analisados, existem poucas pessoas ambidestras
+Aparentemente, quem tem uma relacao peso/aultura maior tem também um batting average maior
+A quantidade de home runs cresce em conjunto com o batting average, porem ate um certo limite
+
+
+2.Que perguntas você tem sobre os dados?
+Quantos jogadores foram avaliados?
+deu pra entender no grafico que estão estudando rebatedores, mas isso nao foi explicito no bullet, são mesmo rebatedores?
+os jogadores são amadores ou profissionais?
+
+
+
+3.Que relacionamentos você percebeu?
+a quantidade de home runs cresce em conjunto com o batting average, porem ate um certo limite
+aparentemente, quem tem uma relacao peso/aultura maior tem também um batting average maior
+
+
+4.O que você acha que é o principal destaque dessa visualização?
+eu acho que é o limite de performance dos rebatedores de baseball
+
+5.Existe algo que você não entende no gráfico?
+como funciona exatamente o Weight/Height ratio? o valor ser 3 seria um peso de 3 para 1 na aultura? isso ficou confuso
+existem pontos que passam dos eixos, dando impressao que estão fora do escopo do grafico, era pra ser assim mesmo?

@@ -1,0 +1,21 @@
+
+Link para a visualização:
+http://bl.ocks.org/MatheusMaciel/aa0ae45197764fe93bacf274e3eb4cf5
+
+##Perguntas:
+1.O que você percebeu na visualização?
+- Parece haver uma tendência de quanto maior a proporção de tacadas que o jogador acerta, maior o número de home runs ele faz. O a relação do peso/altura e se ele usa a mão direita, esquerda ou ambas não parece influenciar a quantidade de home runs nem a taxa de acertos de tacadas.
+
+2.Que perguntas você tem sobre os dados?
+- Os dados são MLB ou de outra liga de baseball?
+- Esses dados são de que época?
+- Será que os jogadores estão fazendo mais home-runs ao longo do tempo? Ou então estão acertando mais tacadas?
+
+3.Que relacionamentos você percebeu?
+- Apenas entre o batting avarage e os home runs
+
+4.O que você acha que é o principal destaque dessa visualização?
+- A tendência que existe de quando maior o acerto de tacadas, maior o número de home runs 
+
+5.Existe algo que você não entende no gráfico?
+- Não  
