@@ -1,6 +1,6 @@
 # Baseball Player Batting Performance
 
-This project uses data visualization techniques to help investigate the existence of a relation between a baseball player batting batting performance and some features like batting hand, wheight and height.
+This project uses data visualization techniques to help investigate the existence of a relation between a baseball player batting batting performance and some features like batting hand, weight and height.
 
 This task involves:
 * Encode data using optimal visual elements
